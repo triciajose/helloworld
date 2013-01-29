@@ -7,8 +7,18 @@ function helloworld_menu() {
     'title' => 'Hello World',
     'page callback' => 'helloworld_test',
     'page arguments' => array(),
-    'access callback' => true,
-    // 'access callback' => 'user_access',
+    // 'access callback' => TRUE,
+    'access callback' => 'user_access',
+    'access arguments' => array('access hello world'),
+    'type' => MENU_NORMAL_ITEM,
+  );
+
+    $items['goodnightworld'] = array(
+    'title' => 'Goodnight World',
+    'page callback' => 'goodnight_world',
+    'page arguments' => array(),
+    'access callback' => TRUE,
+    //'access callback' => 'user_access',
     // 'access arguments' => array(),
     'type' => MENU_NORMAL_ITEM,
   );
@@ -19,3 +29,28 @@ function helloworld_menu() {
 function helloworld_test() {
   return 'Hello World';
 }
+
+function goodnight_world() {
+  $time = 60;
+  while($time >=0) {
+    $time_string .= $time . '<br>';
+    $time--;
+  }
+
+
+  return $time_string . '<br> Goodnight World';
+}
+
+function helloworld_permission() {
+  $perms = array();
+
+  $perms['access hello world'] = array(
+    'title' => t('access hello world'),
+    'description' => t('to access hello world'),
+
+  );
+
+  return $perms;
+
+}
+
