@@ -7,9 +7,9 @@ function helloworld_menu() {
     'title' => 'Hello World',
     'page callback' => 'helloworld_test',
     'page arguments' => array(),
-    // 'access callback' => TRUE,
-    'access callback' => 'user_access',
-    'access arguments' => array('access hello world'),
+     'access callback' => TRUE,
+    //'access callback' => 'custom_user_access',
+    //'access arguments' => array('access hello world'),
     'type' => MENU_NORMAL_ITEM,
   );
 
@@ -18,27 +18,31 @@ function helloworld_menu() {
     'page callback' => 'goodnight_world',
     'page arguments' => array(),
     'access callback' => TRUE,
-    //'access callback' => 'user_access',
-    // 'access arguments' => array(),
+    // 'access callback' => 'user_access',
+    //'access arguments' => array('access goodnight world'),
     'type' => MENU_NORMAL_ITEM,
   );
+
 
   return $items;
 }
 
-function helloworld_test() {
-  return 'Hello World';
+function goodnight_world() {
+   $form = drupal_get_form('user_perm_form');
+
+   return $form;
+
 }
 
-function goodnight_world() {
-  $time = 60;
-  while($time >=0) {
-    $time_string .= $time . '<br>';
-    $time--;
-  }
+function helloworld_test($name = NULL, $age = NULL) {
+  // while($age >=0) {
+    // $time_string .= $age . '<br>';
+    // $age--;
+  // }
 
 
-  return $time_string . '<br> Goodnight World';
+  // return $time_string . '<br>   Goodnight' . $name;
+  return 'Hello ' . $name;
 }
 
 function helloworld_permission() {
@@ -54,3 +58,96 @@ function helloworld_permission() {
 
 }
 
+function goodnight_world_permission() {
+  $perms = array();
+
+  $perms['access goodnight world'] = array(
+    'title' => t('access goodnight world'),
+    'description' => t('to access goodnight world'),
+
+  );
+
+  return $perms;
+
+}
+
+
+function custom_user_access($string, $account = NULL) {
+  global $user;
+
+  if (!isset($account)) {
+    $account = $user;
+  }
+
+  // User has all the privileges
+  if ($account->uid == 1)
+    return true;
+
+  // $pin_val = user_perm_form();
+
+  // if (($pin_val % 2) == 0)
+    // return true;
+
+  return false;
+
+
+}
+
+
+
+function user_perm_form($form, $form_state) {
+  $form['name'] = array(
+    '#type' => 'textfield', //you can find a list of available types in the form api
+    '#title' => 'Name',
+    '#maxlength' => 20,
+    '#required' => TRUE, //make this field required
+  );
+
+  $form['age'] = array(
+    '#type' => 'textfield', //you can find a list of available types in the form api
+    '#title' => 'Age',
+    '#size' => 2,
+    '#maxlength' => 2,
+    '#required' => TRUE, //make this field required
+  );
+
+  $form['submit_botton'] = array(
+    '#type' => 'submit',
+    '#value' => t('Click Here!'),
+
+
+  );
+
+  return $form;
+
+
+}
+
+
+function helloworld_node_view($node, $view_mode, $langcode) {
+
+  $node->content['a'] = array(
+    '#markup' => 'this is a hook',
+    '#weight' => 10,
+  );
+
+return $node;
+}
+
+function user_perm_form_submit($form, &$form_state) {
+
+
+
+  $form_state['redirect'] = array(
+    'helloworld/' . $form_state['values']['name'] .'/' . $form_state['values']['age'],
+    // array (
+    //   'query' => array (
+    //     'name' => $form_state['values']['name'],
+    //     'age' => $form_state['values']['age'],
+    //   ),
+
+    // ),
+
+  );
+
+}
