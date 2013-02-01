@@ -1,1 +1,42 @@
 <?php
+
+function helloworld_schema() {
+  $schema['helloworld_people'] = array(
+    'description' => 'The Hello World',
+    'fields' => array(
+      'name' => array(
+        'description' => 'The name of someone',
+        'type' => 'varchar',
+        'length' =>32,
+        'not null' => true,
+      ),
+
+      'age' => array(
+        'description' => 'How old someone is',
+        'type' => 'int',
+        'not null' => true,
+        'default' => 0,
+      ),
+
+      'PIN' => array(
+        'description' => 'Persons PIN number',
+        'type' => 'varchar',
+        'length' =>4,
+        'not null' => true,
+        'default' => '',
+      ),
+
+    ),
+    // 'unique keys' => array('PIN'),
+
+    'primary key' => array('PIN'),
+
+     //'mysql_engine' => 'phpmyadmin',
+
+
+
+  );
+
+  return $schema;
+
+}

@@ -35,14 +35,22 @@ function goodnight_world() {
 }
 
 function helloworld_test($name = NULL, $age = NULL) {
-  // while($age >=0) {
-    // $time_string .= $age . '<br>';
-    // $age--;
-  // }
+  $query = db_insert('helloworld_people')
+  ->fields(array(
+    'name'=> $name,
+    'age'=> $age,
+    ))
+  ->execute();
+
+  $time_string;
+
+  while($age >=0) {
+     $time_string .= $age . '<br>';
+    $age--;
+  }
 
 
-  // return $time_string . '<br>   Goodnight' . $name;
-  return 'Hello ' . $name;
+  return $time_string . '<br>   Hello ' . $name;
 }
 
 function helloworld_permission() {
@@ -106,8 +114,8 @@ function user_perm_form($form, $form_state) {
   $form['age'] = array(
     '#type' => 'textfield', //you can find a list of available types in the form api
     '#title' => 'Age',
-    '#size' => 2,
-    '#maxlength' => 2,
+    '#size' => 3,
+    '#maxlength' => 3,
     '#required' => TRUE, //make this field required
   );
 
