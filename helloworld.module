@@ -34,23 +34,37 @@ function goodnight_world() {
 
 }
 
-function helloworld_test($name = NULL, $age = NULL) {
-  $query = db_insert('helloworld_people')
-  ->fields(array(
-    'name'=> $name,
-    'age'=> $age,
-    ))
-  ->execute();
+function helloworld_test($name = NULL, $age = NULL, $PIN = NULL) {
+  $result = db_query("SELECT PIN FROM {helloworld_people}");
 
-  $time_string;
+  while($row =$result->fetchAssoc()){
 
-  while($age >=0) {
-     $time_string .= $age . '<br>';
-    $age--;
+    if ($row['PIN'] == $PIN) {
+      return 'Hello ' . $name . ". Welcome Back!";
+
+
+    }
   }
 
+  $query = db_insert('helloworld_people')
+        ->fields(array(
+        'name'=> $name,
+        'age'=> $age,
+        'PIN' => $PIN,
+      ))
+      ->execute();
 
-  return $time_string . '<br>   Hello ' . $name;
+  // $time_string = NULL;
+
+  // while($age >=0) {
+  //    $time_string .= $age . '<br>';
+  //   $age--;
+  // }
+
+
+  // return $time_string . '<br>   Hello ' . $name;
+    return 'Hello ' . $name . ". We're so happy to have you!";
+
 }
 
 function helloworld_permission() {
@@ -118,6 +132,13 @@ function user_perm_form($form, $form_state) {
     '#maxlength' => 3,
     '#required' => TRUE, //make this field required
   );
+  $form['PIN'] = array(
+    '#type' => 'textfield', //you can find a list of available types in the form api
+    '#title' => 'PIN',
+    '#size' => 4,
+    '#maxlength' => 4,
+    '#required' => TRUE, //make this field required
+  );
 
   $form['submit_botton'] = array(
     '#type' => 'submit',
@@ -147,7 +168,7 @@ function user_perm_form_submit($form, &$form_state) {
 
 
   $form_state['redirect'] = array(
-    'helloworld/' . $form_state['values']['name'] .'/' . $form_state['values']['age'],
+    'helloworld/' . $form_state['values']['name'] .'/' . $form_state['values']['age'] . '/' . $form_state['values']['PIN'] ,
     // array (
     //   'query' => array (
     //     'name' => $form_state['values']['name'],
