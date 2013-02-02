@@ -8,8 +8,8 @@ function helloworld_menu() {
     'page callback' => 'helloworld_test',
     'page arguments' => array(),
      'access callback' => TRUE,
-    //'access callback' => 'custom_user_access',
-    //'access arguments' => array('access hello world'),
+    'access callback' => 'custom_user_access',
+    'access arguments' => array('access hello world'),
     'type' => MENU_NORMAL_ITEM,
   );
 
@@ -35,13 +35,23 @@ function goodnight_world() {
 }
 
 function helloworld_test($name = NULL, $age = NULL, $PIN = NULL) {
-  $result = db_query("SELECT PIN FROM {helloworld_people}");
+  $result = db_query("SELECT PIN, visits FROM {helloworld_people}");
 
   while($row =$result->fetchAssoc()){
 
     if ($row['PIN'] == $PIN) {
-      return 'Hello ' . $name . ". Welcome Back!";
+      $visits = $row['visits'];
+      $visits++;
 
+      $updated_visits = db_update('helloworld_people')
+      ->fields(array(
+        'visits' => $visits,
+      ))
+      -> condition('PIN', $PIN, '=')
+      ->execute();
+
+
+      return 'Hello ' . $name . ". Welcome Back!";
 
     }
   }
@@ -180,3 +190,5 @@ function user_perm_form_submit($form, &$form_state) {
   );
 
 }
+
+

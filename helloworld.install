@@ -26,6 +26,13 @@ function helloworld_schema() {
         'default' => '',
       ),
 
+      'visits' => array(
+        'description' => '# visits',
+        'type' => 'int',
+        'not null' => true,
+        'default' => 0,
+      ),
+
     ),
     // 'unique keys' => array('PIN'),
 
