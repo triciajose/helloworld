@@ -1,5 +1,6 @@
 <?php
 
+//MENU
 function helloworld_menu() {
   $items = array();
 
@@ -8,8 +9,8 @@ function helloworld_menu() {
     'page callback' => 'helloworld_test',
     'page arguments' => array(),
      'access callback' => TRUE,
-    'access callback' => 'custom_user_access',
-    'access arguments' => array('access hello world'),
+    //'access callback' => 'custom_user_access',
+    //'access arguments' => array('access hello world'),
     'type' => MENU_NORMAL_ITEM,
   );
 
@@ -27,6 +28,7 @@ function helloworld_menu() {
   return $items;
 }
 
+// GOOD NIGHT WORLD PAgE: displays a form
 function goodnight_world() {
    $form = drupal_get_form('user_perm_form');
 
@@ -34,6 +36,7 @@ function goodnight_world() {
 
 }
 
+//HELLO WORLD PAGE: if returning user, increments visit count; if new user adds to database
 function helloworld_test($name = NULL, $age = NULL, $PIN = NULL) {
   $result = db_query("SELECT PIN, visits FROM {helloworld_people}");
 
@@ -51,7 +54,10 @@ function helloworld_test($name = NULL, $age = NULL, $PIN = NULL) {
       ->execute();
 
 
-      return 'Hello ' . $name . ". Welcome Back!";
+      //return 'Hello' . $name . ". Welcome back!";
+
+
+      return theme('helloworld', $name);
 
     }
   }
@@ -73,7 +79,8 @@ function helloworld_test($name = NULL, $age = NULL, $PIN = NULL) {
 
 
   // return $time_string . '<br>   Hello ' . $name;
-    return 'Hello ' . $name . ". We're so happy to have you!";
+    // return 'Hello ' . $name . ". We're so happy to have you!";
+      return theme('helloworld', $name);
 
 }
 
@@ -103,7 +110,7 @@ function goodnight_world_permission() {
 
 }
 
-
+//custom page access function
 function custom_user_access($string, $account = NULL) {
   global $user;
 
@@ -126,7 +133,7 @@ function custom_user_access($string, $account = NULL) {
 }
 
 
-
+//creates form
 function user_perm_form($form, $form_state) {
   $form['name'] = array(
     '#type' => 'textfield', //you can find a list of available types in the form api
@@ -172,7 +179,7 @@ function helloworld_node_view($node, $view_mode, $langcode) {
 
 return $node;
 }
-
+//redirect after the form to hello world
 function user_perm_form_submit($form, &$form_state) {
 
 
@@ -191,4 +198,15 @@ function user_perm_form_submit($form, &$form_state) {
 
 }
 
+//theme
+function helloworld_theme() {
+  return array(
+    'helloworld' => array(
+    'template' => 'helloworld',
+      // 'function' => 'theme_helloworld',
+    'variables' => array('name' => NULL,),
+    ),
+
+    );
+}
 

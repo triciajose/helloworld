@@ -30,7 +30,7 @@ function helloworld_schema() {
         'description' => '# visits',
         'type' => 'int',
         'not null' => true,
-        'default' => 0,
+        'default' => 1,
       ),
 
     ),
